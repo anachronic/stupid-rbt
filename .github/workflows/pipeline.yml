@@ -1,4 +1,4 @@
-name: Tests
+name: General pipeline
 
 on:
   push:
@@ -7,6 +7,27 @@ on:
     branches: [ main ]
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version:
+          - 16.x
+          - 17.x
+          - lts/*
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Lint all files
+        run: yarn lint
+
   jest:
     runs-on: ubuntu-latest
 
