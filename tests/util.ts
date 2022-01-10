@@ -7,5 +7,3 @@ export function checkRedBlackTree(tree: RedBlackTree) {
 
   return tree.root.color === RedBlackTreeColor.Black
 }
-
-
