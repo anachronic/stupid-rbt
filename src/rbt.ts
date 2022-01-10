@@ -27,10 +27,10 @@ export class RedBlackTree {
       return
     }
 
-    const newNode = new RedBlackTreeNode(
-      RedBlackTreeColor.Red,
-      data
-    )
+    // const newNode = new RedBlackTreeNode(
+    //   RedBlackTreeColor.Red,
+    //   data
+    // )
     // insert something
   }
 
