@@ -1,6 +1,6 @@
 export enum RedBlackTreeColor {
   Red,
-  Black
+  Black,
 }
 
 class RedBlackTreeNode {
@@ -17,12 +17,9 @@ export class RedBlackTree {
     this.root = undefined
   }
 
-  public insert(data:number) {
+  public insert(data: number) {
     if (!this.root) {
-      this.root = new RedBlackTreeNode(
-        RedBlackTreeColor.Black,
-        data
-      )
+      this.root = new RedBlackTreeNode(RedBlackTreeColor.Black, data)
 
       return
     }

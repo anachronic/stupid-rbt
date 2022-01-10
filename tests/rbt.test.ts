@@ -1,4 +1,4 @@
-import {checkRedBlackTree} from './util'
+import { checkRedBlackTree } from './util'
 import { RedBlackTree } from '../src/rbt'
 
 describe('A Red Black Tree', () => {
