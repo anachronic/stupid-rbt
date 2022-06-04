@@ -1,7 +1,4 @@
-export enum RedBlackTreeColor {
-  Red,
-  Black,
-}
+export type RedBlackTreeColor = 'red' | 'black'
 
 export class RedBlackTreeNode {
   public left?: RedBlackTreeNode
@@ -20,12 +17,12 @@ export class RedBlackTree {
 
   public insert(data: number) {
     if (!this.root) {
-      this.root = new RedBlackTreeNode(RedBlackTreeColor.Black, data)
+      this.root = new RedBlackTreeNode('black', data)
 
       return
     }
 
-    const newNode = new RedBlackTreeNode(RedBlackTreeColor.Red, data)
+    const newNode = new RedBlackTreeNode('red', data)
 
     const parent = this.findParentFor(data)
 
@@ -46,8 +43,8 @@ export class RedBlackTree {
       return
     }
 
-    if (parent.color === RedBlackTreeColor.Red) {
-      if (aunt.color === RedBlackTreeColor.Red) {
+    if (parent.color === 'red') {
+      if (aunt.color === 'red') {
         if (!aunt.parent) {
           return
         }
@@ -121,14 +118,14 @@ export class RedBlackTree {
   }
 
   private recolorAround(node: RedBlackTreeNode) {
-    node.color = RedBlackTreeColor.Red
+    node.color = 'red'
 
     if (node.left) {
-      node.left.color = RedBlackTreeColor.Black
+      node.left.color = 'black'
     }
 
     if (node.right) {
-      node.right.color = RedBlackTreeColor.Black
+      node.right.color = 'black'
     }
   }
 
@@ -137,6 +134,6 @@ export class RedBlackTree {
       return
     }
 
-    this.root.color = RedBlackTreeColor.Black
+    this.root.color = 'black'
   }
 }

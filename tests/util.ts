@@ -1,4 +1,4 @@
-import { RedBlackTree, RedBlackTreeColor, RedBlackTreeNode } from '../src/rbt'
+import { RedBlackTree, RedBlackTreeNode } from '../src/rbt'
 
 export class RedBlackTreeChecker {
   tree: RedBlackTree
@@ -26,7 +26,7 @@ export class RedBlackTreeChecker {
   }
 
   private checkRootColor() {
-    if (this.tree.root?.color !== RedBlackTreeColor.Black) {
+    if (this.tree.root?.color !== 'black') {
       throw new Error("Expected root to be black but wasn't")
     }
   }
@@ -54,7 +54,7 @@ export class RedBlackTreeChecker {
       return
     }
 
-    if (node.color === RedBlackTreeColor.Black) {
+    if (node.color === 'black') {
       this.checkConsecutiveRedNodesUnderNode(node.left)
       this.checkConsecutiveRedNodesUnderNode(node.right)
 
@@ -62,7 +62,7 @@ export class RedBlackTreeChecker {
     }
 
     if (node.right) {
-      if (node.right.color === RedBlackTreeColor.Red) {
+      if (node.right.color === 'red') {
         throw new Error(`Detected two consecutive red nodes: ${node.right?.data} and ${node.data}`)
       }
 
@@ -70,7 +70,7 @@ export class RedBlackTreeChecker {
     }
 
     if (node.left) {
-      if (node.left.color === RedBlackTreeColor.Red) {
+      if (node.left.color === 'red') {
         throw new Error(`Detected two consecutive red nodes: ${node.left?.data} and ${node.data}`)
       }
 
@@ -82,8 +82,7 @@ export class RedBlackTreeChecker {
     const paths = this.constructAllPaths(this.tree.root)
 
     const blacks = paths.map(
-      (path) =>
-        path.map((node) => node.color).filter((color) => color === RedBlackTreeColor.Black).length
+      (path) => path.map((node) => node.color).filter((color) => color === 'black').length
     )
 
     const expected = blacks[0]
