@@ -12,14 +12,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Use LTS Node.js
+      - name: Use Node 18
         uses: actions/setup-node@v2
         with:
-          node-version: lts/*
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+          node-version: 18
+      - name: Set up pnpm and install
+        uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 7.1.2
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile, --strict-peer-dependencies]
       - name: Lint all files
-        run: yarn lint
+        run: pnpm lint
 
   test:
     runs-on: ubuntu-latest
@@ -28,8 +33,7 @@ jobs:
       matrix:
         node-version:
           - 16.x
-          - 17.x
-          - lts/*
+          - 18
 
     steps:
       - uses: actions/checkout@v2
@@ -37,10 +41,15 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+      - name: Set up pnpm and install
+        uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 7.1.2
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile, --strict-peer-dependencies]
       - name: Run tests
-        run: yarn test
+        run: pnpm test
 
   build:
     runs-on: ubuntu-latest
@@ -48,12 +57,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Use LTS Node.js
+      - name: Use Node 18
         uses: actions/setup-node@v2
         with:
-          node-version: lts/*
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+          node-version: 18
+      - name: Set up pnpm and install
+        uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 7.1.2
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile, --strict-peer-dependencies]
       - name: Build the project
         run: yarn build
       - name: Set up artifact
