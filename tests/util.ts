@@ -14,6 +14,7 @@ ${'  '.repeat(2 * level)})`
 }
 
 export function debug(tree: RedBlackTreeNode) {
+  // eslint-disable-next-line
   console.log(representTree(tree, 0))
 }
 
