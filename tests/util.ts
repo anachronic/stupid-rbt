@@ -8,8 +8,9 @@ function representTree(node: RedBlackTreeNode | undefined, level: number): strin
   return `Node(
 ${'  '.repeat(2 * level)}${node.data},
 ${'  '.repeat(2 * level)}${node.color},
-${'  '.repeat(2 * level)}Left =${representTree(node.left, level + 1)},
-${'  '.repeat(2 * level)}Right=${representTree(node.right, level + 1)}
+${'  '.repeat(2 * level)}Parent=${typeof node.parent?.data === 'number' ? node.parent.data : '()'}
+${'  '.repeat(2 * level)}Left  =${representTree(node.left, level + 1)},
+${'  '.repeat(2 * level)}Right =${representTree(node.right, level + 1)}
 ${'  '.repeat(2 * level)})`
 }
 
@@ -30,6 +31,16 @@ export class RedBlackTreeChecker {
   insert(x: number) {
     this.tree.insert(x)
     this.insertedNumbers.push(x)
+  }
+
+  debug() {
+    if (!this.tree.root) {
+      // eslint-disable-next-line
+      console.log('root is empty')
+      return
+    }
+
+    debug(this.tree.root)
   }
 
   check() {

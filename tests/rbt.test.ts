@@ -47,4 +47,23 @@ describe('A Red Black Tree', () => {
 
     expect(() => checker.check()).not.toThrow()
   })
+
+  it('is valid for inserts from 0 to 10000', () => {
+    const checker = new RedBlackTreeChecker()
+
+    for (let i = 0; i < 10000; i++) {
+      checker.insert(i)
+    }
+    expect(() => checker.check()).not.toThrow()
+  })
+
+  it('is valid for inserts from 10000 down to 0', () => {
+    const checker = new RedBlackTreeChecker()
+
+    for (let i = 10000; i >= 0; i--) {
+      checker.insert(i)
+    }
+
+    expect(() => checker.check()).not.toThrow()
+  })
 })
