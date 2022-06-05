@@ -11,10 +11,6 @@ export class RedBlackTreeNode {
 export class RedBlackTree {
   root?: RedBlackTreeNode
 
-  constructor() {
-    this.root = undefined
-  }
-
   public insert(data: number) {
     if (!this.root) {
       this.root = new RedBlackTreeNode('black', data)
@@ -22,7 +18,7 @@ export class RedBlackTree {
       return
     }
 
-    const newNode = new RedBlackTreeNode('red', data)
+    let newNode = new RedBlackTreeNode('red', data)
 
     const parent = this.findParentFor(data)
 
@@ -37,24 +33,74 @@ export class RedBlackTree {
     }
     newNode.parent = parent
 
-    // now that's inserted, check if coloring is needed
-    const aunt = this.auntForNode(newNode)
-    if (!aunt) {
-      return
-    }
+    let grandParent = parent?.parent
 
-    if (parent.color === 'red') {
-      if (aunt.color === 'red') {
-        if (!aunt.parent) {
-          return
+    while (newNode.parent?.color === 'red') {
+      grandParent = newNode.parent.parent
+      if (!grandParent) {
+        break
+      }
+
+      // if newNode is on the left side of its grandparent
+      if (newNode.data < grandParent.data) {
+        const aunt = grandParent.right
+        const auntColor = aunt?.color || 'black'
+
+        if (auntColor === 'red') {
+          // recolor up to grandparent
+          grandParent.color = 'red'
+          newNode.parent.color = 'black'
+
+          if (aunt) {
+            aunt.color = 'black'
+          }
+
+          newNode = grandParent
+        } else {
+          if (newNode.data > newNode.parent.data) {
+            newNode = newNode.parent
+            leftRotate(newNode)
+          }
+          // aunt is black and newNode is to the left of its parent (and its
+          // parent is to the left of its parent)
+          if (newNode.parent?.parent) {
+            rightRotate(newNode.parent.parent)
+
+            grandParent.color = 'red'
+            newNode.parent.color = 'black'
+          }
         }
-        this.recolorAround(aunt.parent)
       } else {
-        // rotate
+        const aunt = grandParent.left
+        const auntColor = aunt?.color || 'black'
+
+        if (auntColor === 'red') {
+          // recolor up to grandparent
+          grandParent.color = 'red'
+          newNode.parent.color = 'black'
+
+          if (aunt) {
+            aunt.color = 'black'
+          }
+
+          newNode = grandParent
+        } else {
+          if (newNode.data < newNode.parent.data) {
+            newNode = newNode.parent
+            rightRotate(newNode)
+          }
+
+          if (newNode.parent?.parent) {
+            leftRotate(newNode.parent.parent)
+
+            grandParent.color = 'red'
+            newNode.parent.color = 'black'
+          }
+        }
       }
     }
 
-    this.checkRootRecoloring()
+    this.root.color = 'black'
   }
 
   public search(query: number) {
@@ -96,44 +142,63 @@ export class RedBlackTree {
     // arrived at null
     return parent
   }
+}
 
-  private auntForNode(node: RedBlackTreeNode) {
-    const parent = node.parent
-
-    if (!parent) {
-      return null
-    }
-
-    const grandma = parent.parent
-
-    if (!grandma) {
-      return null
-    }
-
-    if (grandma.left?.data === parent.data) {
-      return grandma.right
-    } else {
-      return grandma.left
-    }
+function leftRotate(node: RedBlackTreeNode): void {
+  if (!node.right) {
+    throw new Error("Makes no sense to rotate left if there's nothing to the right")
   }
 
-  private recolorAround(node: RedBlackTreeNode) {
-    node.color = 'red'
+  const originalParent = node.parent
 
-    if (node.left) {
-      node.left.color = 'black'
-    }
+  const right = node.right
+  const rightLeft = node.right?.left
 
-    if (node.right) {
-      node.right.color = 'black'
-    }
+  right.left = node
+  node.parent = right.left
+  node.right = rightLeft
+  if (rightLeft) {
+    rightLeft.parent = node.right
   }
 
-  private checkRootRecoloring() {
-    if (!this.root) {
-      return
-    }
-
-    this.root.color = 'black'
+  if (!originalParent) {
+    return
   }
+
+  if (node.data > originalParent.data) {
+    originalParent.right = right
+  } else {
+    originalParent.left = right
+  }
+  right.parent = originalParent
+}
+
+function rightRotate(node: RedBlackTreeNode): void {
+  if (!node.left) {
+    throw new Error("Makes no sense to rotate right if there's nothing to the left")
+  }
+
+  const originalParent = node.parent
+
+  const left = node.left
+  const leftRight = node.left?.right
+
+  left.right = node
+  node.parent = left
+  node.left = leftRight
+
+  if (leftRight) {
+    leftRight.parent = node.left
+  }
+
+  if (!originalParent) {
+    return
+  }
+
+  if (node.data > originalParent.data) {
+    originalParent.right = left
+  } else {
+    originalParent.left = left
+  }
+  left.parent = originalParent
 }
