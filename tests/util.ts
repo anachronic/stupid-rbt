@@ -1,5 +1,22 @@
 import { RedBlackTree, RedBlackTreeNode } from '../src/rbt'
 
+function representTree(node: RedBlackTreeNode | undefined, level: number): string {
+  if (!node) {
+    return '()'
+  }
+
+  return `Node(
+${'  '.repeat(2 * level)}${node.data},
+${'  '.repeat(2 * level)}${node.color},
+${'  '.repeat(2 * level)}Left =${representTree(node.left, level + 1)},
+${'  '.repeat(2 * level)}Right=${representTree(node.right, level + 1)}
+${'  '.repeat(2 * level)})`
+}
+
+export function debug(tree: RedBlackTreeNode) {
+  console.log(representTree(tree, 0))
+}
+
 export class RedBlackTreeChecker {
   tree: RedBlackTree
   insertedNumbers: Array<number>
